@@ -1,8 +1,8 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
   <head>
     <meta charset="UTF-8" />
-    <title>3D Object Viewer</title>
+    <title>Tinga Impresión 3D</title>
     <link rel="stylesheet" type="text/css" href="3DObjectViewer.css" />
     <meta name="theme-color" content="#3f729b" />
     <meta
@@ -43,6 +43,18 @@
           type="submit"
           class="buttonChanger"
           onclick="moreDensity(false);"
+          value="-"
+        /><br />
+        <span id="fillLabel"></span>:&nbsp;<span id="fillValue"></span
+        >&nbsp;%&nbsp;<input
+          type="submit"
+          class="buttonChanger"
+          onclick="moreFill(true);"
+          value="+"
+        />&nbsp;<input
+          type="submit"
+          class="buttonChanger"
+          onclick="moreFill(false);"
           value="-"
         /><br />
         <span id="weightLabel"></span>:&nbsp;<span id="weightValue"></span
