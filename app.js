@@ -23,20 +23,25 @@ var container,
   width,
   widthFinal,
   depth,
-  depthFinal;
+  depthFinal,
+  fillValue;
 
+var fillValue = "10.00";
 var density = parseFloat("1.05");
-var filament_cost = parseFloat("200");
+var filament_cost = parseFloat("4220");
 var filament_diameter = parseFloat("1.75");
-var printing_speed = parseFloat("150");
+var printing_speed = parseFloat("50");
+var printing_speed = parseFloat("50");
+var printing_speed = parseFloat("10");
 
+document.getElementById("fillLabel").innerHTML = "Relleno";
 document.getElementById("densityLabel").innerHTML = "Densidad";
 document.getElementById("weightLabel").innerHTML = "Peso";
 document.getElementById("volumeLabel").innerHTML = "Volumen";
 document.getElementById("sizeLabel").innerHTML = "Medidas";
 document.getElementById("costKilogramLabel").innerHTML =
   "Costo de 1 kilogramo de filamento";
-document.getElementById("costLabel").innerHTML = "Costo de impresi&oacute;n";
+document.getElementById("costLabel").innerHTML = "Costo de PLA";
 document.getElementById("diameterLabel").innerHTML =
   "Di&aacute;metro del filamento";
 document.getElementById("speedLabel").innerHTML =
@@ -169,13 +174,13 @@ function init(file) {
         widthFinal = widthFinal.toFixed(2);
         depthFinal = depth / 10;
         depthFinal = depthFinal.toFixed(2);
-        var volumeFinal = vol / 1000;
+        var volumeFinal = ((vol / 1000) * fillValue) / 100;
         volumeFinal = volumeFinal.toFixed(2);
-        var weightFinal = volumeFinal * density;
+        var weightFinal = (volumeFinal * density * fillValue) / 100;
         weightFinal = weightFinal.toFixed(2);
 
         var filament_length = parseFloat(
-          (((vol / (filament_diameter / 2)) ^ (2 / Math.PI)) * 2) / 10
+          (volumeFinal / (Math.PI * Math.pow(filament_diameter / 2, 2))) * 1000
         ).toFixed(2);
         filament_length = parseFloat(filament_length).toFixed(0);
 
@@ -193,6 +198,7 @@ function init(file) {
         finalCost = parseFloat(finalCost).toFixed(2);
 
         document.getElementById("container2").style.display = "block";
+        document.getElementById("fillValue").innerHTML = fillValue;
         document.getElementById("densityValue").innerHTML = density;
         document.getElementById("weightValue").innerHTML = weightFinal;
         document.getElementById("volumeValue").innerHTML = volumeFinal;
@@ -306,9 +312,9 @@ function moreDensity(a) {
   widthFinal = widthFinal.toFixed(2);
   var depthFinal = depth / 10;
   depthFinal = depthFinal.toFixed(2);
-  var volumeFinal = vol / 1000;
+  var volumeFinal = ((vol / 1000) * fillValue) / 100;
   volumeFinal = volumeFinal.toFixed(2);
-  var weightFinal = volumeFinal * density;
+  var weightFinal = (volumeFinal * density * fillValue) / 100;
   weightFinal = weightFinal.toFixed(2);
 
   document.getElementById("densityValue").innerHTML = density;
@@ -317,6 +323,52 @@ function moreDensity(a) {
   document.getElementById("widthValue").innerHTML = widthFinal;
   document.getElementById("depthValue").innerHTML = depthFinal;
   document.getElementById("heightValue").innerHTML = heightFinal;
+  document.getElementById("diameterValue").innerHTML = filament_diameter;
+  updateCost();
+}
+
+function moreFill(a) {
+  var result;
+  if (a == true) {
+    result = parseFloat(fillValue) + parseFloat("5");
+    if (result <= 100) {
+      fillValue = result;
+    }
+  } else {
+    result = parseFloat(fillValue) - parseFloat("5");
+    if (result >= 0) {
+      fillValue = result;
+    }
+  }
+
+  fillValue = parseFloat(fillValue).toFixed(2);
+
+  var heightFinal = height / 10;
+  heightFinal = heightFinal.toFixed(2);
+  var widthFinal = width / 10;
+  widthFinal = widthFinal.toFixed(2);
+  var depthFinal = depth / 10;
+  depthFinal = depthFinal.toFixed(2);
+  var volumeFinal = ((vol / 1000) * fillValue) / 100;
+  volumeFinal = volumeFinal.toFixed(2);
+  var weightFinal = (volumeFinal * density * fillValue) / 100;
+  weightFinal = weightFinal.toFixed(2);
+  var filament_length = parseFloat(
+    (volumeFinal / (Math.PI * Math.pow(filament_diameter / 2, 2))) * 1000
+  ).toFixed(2);
+  filament_length = parseFloat(filament_length).toFixed(0);
+
+  document.getElementById("fillValue").innerHTML = fillValue;
+  document.getElementById("fillValue").innerHTML = fillValue;
+  document.getElementById("densityValue").innerHTML = density;
+  document.getElementById("weightValue").innerHTML = weightFinal;
+  document.getElementById("volumeValue").innerHTML = volumeFinal;
+  document.getElementById("widthValue").innerHTML = widthFinal;
+  document.getElementById("depthValue").innerHTML = depthFinal;
+  document.getElementById("heightValue").innerHTML = heightFinal;
+  document.getElementById("volumeValue").innerHTML = volumeFinal;
+  document.getElementById("lengthValue").innerHTML = filament_length;
+
   updateCost();
 }
 
@@ -339,9 +391,9 @@ function moreCost(a) {
 }
 
 function updateCost() {
-  var volumeFinal = vol / 1000;
+  var volumeFinal = ((vol / 1000) * fillValue) / 100;
   volumeFinal = volumeFinal.toFixed(2);
-  var weightFinal = volumeFinal * density;
+  var weightFinal = (volumeFinal * density * fillValue) / 100;
   weightFinal = weightFinal.toFixed(2);
   var finalCost = (weightFinal * filament_cost) / 1000;
   finalCost = parseFloat(finalCost).toFixed(2);
@@ -364,8 +416,11 @@ function moreDiameter(a) {
 
   filament_diameter = parseFloat(filament_diameter).toFixed(2);
 
+  var volumeFinal = ((vol / 1000) * fillValue) / 100;
+  volumeFinal = volumeFinal.toFixed(2);
+
   var filament_length = parseFloat(
-    (((vol / (filament_diameter / 2)) ^ (2 / Math.PI)) * 2) / 10
+    (volumeFinal / (Math.PI * Math.pow(filament_diameter / 2, 2))) * 1000
   ).toFixed(2);
   filament_length = parseFloat(filament_length).toFixed(0);
 
@@ -398,12 +453,14 @@ function moreSpeed(a) {
       printing_speed = result;
     }
   }
-
+  var volumeFinal = ((vol / 1000) * fillValue) / 100;
+  volumeFinal = volumeFinal.toFixed(2);
   printing_speed = parseFloat(printing_speed).toFixed(0);
 
   var filament_length = parseFloat(
-    (((vol / (filament_diameter / 2)) ^ (2 / Math.PI)) * 2) / 10
+    (volumeFinal / (Math.PI * Math.pow(filament_diameter / 2, 2))) * 1000
   ).toFixed(2);
+  filament_length = parseFloat(filament_length).toFixed(0);
 
   var hours = Math.floor(filament_length / printing_speed / 60);
   hours = parseFloat(hours).toFixed(0);
