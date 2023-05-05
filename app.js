@@ -358,6 +358,20 @@ function moreFill(a) {
   ).toFixed(2);
   filament_length = parseFloat(filament_length).toFixed(0);
 
+  var hours = Math.floor(filament_length / printing_speed / 60);
+  hours = parseFloat(hours).toFixed(0);
+
+  var minutes = (filament_length / printing_speed) % 60;
+  minutes = parseFloat(minutes).toFixed(0);
+
+  if (minutes == 0) {
+    minutes = 1;
+  }
+
+  document.getElementById("lengthValue").innerHTML = filament_length;
+  document.getElementById("hoursValue").innerHTML = hours;
+  document.getElementById("minutesValue").innerHTML = minutes;
+
   document.getElementById("fillValue").innerHTML = fillValue;
   document.getElementById("fillValue").innerHTML = fillValue;
   document.getElementById("densityValue").innerHTML = density;
